@@ -3,6 +3,7 @@
 #include "AppFactory.h"
 #include "ModulesApp.h"
 #include "MooseSyntax.h"
+#include "LaplaceYoung.h"
 
 template<>
 InputParameters validParams<RaptorApp>()
@@ -45,6 +46,8 @@ extern "C" void RaptorApp__registerObjects(Factory & factory) { RaptorApp::regis
 void
 RaptorApp::registerObjects(Factory & factory)
 {
+
+registerKernel(LaplaceYoung);
 }
 
 // External entry point for dynamic syntax association
