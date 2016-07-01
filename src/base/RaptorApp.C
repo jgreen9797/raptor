@@ -3,7 +3,10 @@
 #include "AppFactory.h"
 #include "ModulesApp.h"
 #include "MooseSyntax.h"
-#include "LaplaceYoung.h"
+#include "combust.h"
+#include "heatconduction.h"
+#include "heatconductiontimederivative.h"
+#include "heatconvection.h"
 
 template<>
 InputParameters validParams<RaptorApp>()
@@ -47,7 +50,10 @@ void
 RaptorApp::registerObjects(Factory & factory)
 {
 
-registerKernel(LaplaceYoung);
+registerKernel(combust);
+registerKernel(heatconduction);
+registerKernel(heatconductiontimederivative);
+registerKernel(heatconvection);
 }
 
 // External entry point for dynamic syntax association
