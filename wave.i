@@ -49,32 +49,43 @@
   #  type = Diffusion
   #  variable = temp
   #[../]
-  #[./reaction]
-  #  type = Reaction
-  #  variable = temp
-  #[../]
+  [./reaction]
+    type = Reaction
+    variable = temp
+  [../]
   #[./userforcingfunction]
   #  type = UserForcingFunction
   #  variable = temp
   #  function = Combust
-  #[../]
+  #[../]inlet_temperature
 []
 
 [BCs]
+  #[./inlet_temperature]
+  #  type = DirichletBC
+  #  variable = temp
+  #  boundary = left
+  #  value = 2390
+  #[../]
   [./inlet_temperature]
-    type = DirichletBC
+    type = ConvectiveFluxFunction
     variable = temp
+    T_infinity = 300
+    intial_condition = 2300
+    coefficient = 10
     boundary = left
     value = 2390
   [../]
   [./outlet_temperature]
-    type = NeumannBC
+    type = ConvectiveFluxFunction
     variable = temp
+    T_infinity = 300
+    coefficient = .001
     boundary = right
-    function = Combust
+    value = 300
   [../]
   #[./outlet_temperature]
-  #  type = HeatConductionBC
+  #  type = NeumannBC
   #  variable = temp
   #  boundary = right
   #  function = Combust
@@ -98,6 +109,7 @@
 [Executioner]
   type = Transient
   num_steps = 50
+  nl_abs_tol = 1e-6
   solve_type = PJFNK
   petsc_options_iname = '-pc_type -pc_hypre_type'
   petsc_options_value = 'hypre boomeramg'
