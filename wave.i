@@ -15,11 +15,10 @@
   [../]
 []
 
-#Does not affect the solution at all
+#Does not affect the solution at all, but integral output postprocessor is affected
 [Functions]
   [./Combust]
     type = ParsedFunction
-    #value = abs(sqrt(abs(alpha*pi*x)))
     value = 1190.0*alpha
     vars = alpha
     vals = 1.0
@@ -43,53 +42,50 @@
   [./heatconvection]
     type = heatconvection
     variable = temp
-    velocity = '.0032 0 0'
+    velocity = '320 0 0'
   [../]
   #[./diffusion]
   #  type = Diffusion
   #  variable = temp
   #[../]
-  [./reaction]
-    type = Reaction
-    variable = temp
-  [../]
+  #[./reaction]
+  #  type = Reaction
+  #  variable = temp
+  #[../]
   #[./userforcingfunction]
   #  type = UserForcingFunction
   #  variable = temp
   #  function = Combust
-  #[../]inlet_temperature
+  #[../]
 []
 
 [BCs]
-  #[./inlet_temperature]
-  #  type = DirichletBC
-  #  variable = temp
-  #  boundary = left
-  #  value = 2390
-  #[../]
+  [./input_temperature]
+    type = DirichletBC
+    variable = temp
+    boundary = left
+    value = 2390
+  [../]
   [./inlet_temperature]
     type = ConvectiveFluxFunction
     variable = temp
     T_infinity = 300
-    intial_condition = 2300
-    coefficient = 10
+    coefficient = .00020
     boundary = left
-    value = 2390
   [../]
   [./outlet_temperature]
     type = ConvectiveFluxFunction
     variable = temp
     T_infinity = 300
-    coefficient = .001
+    coefficient = .00020
     boundary = right
-    value = 300
   [../]
-  #[./outlet_temperature]
-  #  type = NeumannBC
-  #  variable = temp
-  #  boundary = right
-  #  function = Combust
-  #[../]
+  [./output_temperature]
+    type = NeumannBC
+    variable = temp
+    boundary = right
+    function = Combust
+  [../]
 []
 
 [Materials]

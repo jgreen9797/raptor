@@ -40,12 +40,12 @@
   [./heat_convection_in]
     type = heatconvection
     variable = inlet_temperature
-    velocity = '.0032 0 0'
+    velocity = '3.2 0 0'
   [../]
   [./heat_convection_out]
     type = heatconvection
     variable = outlet_temperature
-    velocity = '.0032 0 0'
+    velocity = '3.2 0 0'
   [../]
 []
 
