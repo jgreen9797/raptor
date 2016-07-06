@@ -19,7 +19,7 @@
 [Functions]
   [./Combust]
     type = ParsedFunction
-    value = 1190.0*alpha
+    value = 1190.0*alpha*(1/(t+.1))
     vars = alpha
     vals = 1.0
   [../]
@@ -42,7 +42,7 @@
   [./heatconvection]
     type = heatconvection
     variable = temp
-    velocity = '320 0 0'
+    velocity = '3200 0 0'
   [../]
   #[./diffusion]
   #  type = Diffusion
@@ -60,32 +60,33 @@
 []
 
 [BCs]
-  [./input_temperature]
-    type = DirichletBC
-    variable = temp
-    boundary = left
-    value = 2390
-  [../]
+  #[./input_temperature]
+  #  type = DirichletBC
+  #  variable = temp
+  #  boundary = left
+  #  value = 2390
+  #[../]
   [./inlet_temperature]
     type = ConvectiveFluxFunction
     variable = temp
-    T_infinity = 300
-    coefficient = .00020
+    T_infinity = 2300
+    coefficient = 20 # W/m^2*K
+    function = Combust
     boundary = left
   [../]
   [./outlet_temperature]
     type = ConvectiveFluxFunction
     variable = temp
     T_infinity = 300
-    coefficient = .00020
+    coefficient = 20 # W/m^2*K
     boundary = right
   [../]
-  [./output_temperature]
-    type = NeumannBC
-    variable = temp
-    boundary = right
-    function = Combust
-  [../]
+  #[./output_temperature]
+  #  type = NeumannBC
+  #  variable = temp
+  #  boundary = right
+  #  function = Combust
+  #[../]
 []
 
 [Materials]
@@ -104,7 +105,7 @@
 
 [Executioner]
   type = Transient
-  num_steps = 50
+  num_steps = 100
   nl_abs_tol = 1e-6
   solve_type = PJFNK
   petsc_options_iname = '-pc_type -pc_hypre_type'
