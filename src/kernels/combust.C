@@ -29,7 +29,13 @@ Real
 combust::computeQpResidual()
 {
   if (_u[_qp] >= 1100)
+  {
+    
+//    std::cout << "ingited" <<std::endl;
+  
     return -_test[_i][_qp] * f();
+  }
+  
   else
     return 0.0;
 }
