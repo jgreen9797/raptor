@@ -9,6 +9,7 @@
 
 #include "Diffusion.h"
 #include "Material.h"
+#include "Reacted.h"
 
 //Forward Declarations
 class heatconduction;
@@ -37,6 +38,7 @@ private:
   const unsigned _dim;
   const MaterialProperty<Real> & _diffusion_coefficient;
   const MaterialProperty<Real> * const _diffusion_coefficient_dT;
+  const VariableValue & _coupled_val;
 };
 
 #endif //HEATCONDUCTION_H

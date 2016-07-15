@@ -21,6 +21,7 @@ InputParameters validParams<heatconduction>()
                                         "Property name of the derivative of the diffusivity with respect "
                                         "to the variable (Default: thermal_conductivity_dT)");
   params.set<bool>("use_displaced_mesh") = true;
+  params.addRequiredCoupledVar("coupled", "Coupled variable (reaction status)");
   return params;
 }
 
@@ -29,14 +30,16 @@ heatconduction::heatconduction(const InputParameters & parameters) :
     _dim(_subproblem.mesh().dimension()),
     _diffusion_coefficient(getMaterialProperty<Real>("diffusion_coefficient_name")),
     _diffusion_coefficient_dT(hasMaterialProperty<Real>("diffusion_coefficient_dT_name") ?
-                              &getMaterialProperty<Real>("diffusion_coefficient_dT_name") : NULL)
+                              &getMaterialProperty<Real>("diffusion_coefficient_dT_name") : NULL),
+    _coupled_val(coupledValue("coupled"))
 {
 }
 
 Real
 heatconduction::computeQpResidual()
 {
-    return _diffusion_coefficient[_qp]*Diffusion::computeQpResidual();
+  //std::cout << _coupled_val[_qp]<<std::endl;
+    return _diffusion_coefficient[_qp]*Diffusion::computeQpResidual() - _coupled_val[_qp];
 }
 
 Real

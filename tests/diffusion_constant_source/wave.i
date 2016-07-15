@@ -25,11 +25,21 @@
   [../]
 []
 
-#Does not affect the solution at all, but integral output postprocessor is affected
+[AuxVariables]
+  [./reaction_boolean]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = ConstantIC
+      value = 300.0
+    [../]
+  [../]
+[]
+
 [Functions]
   [./Combust]
     type = ParsedFunction
-    value = 1190.0*alpha
+    value = 1200.0*alpha
     vars = alpha
     vals =  1.0e6
   [../]
@@ -44,6 +54,7 @@
   [./heat_conduction]
     type = heatconduction
     variable = temp
+    coupled = reaction_boolean
   [../]
   [./heat_conduction_time_derivative]
     type = heatconductiontimederivative
@@ -66,6 +77,17 @@
    type = combust
    variable = temp
    function = Combust
+   coupled = reaction_boolean
+  [../]
+[]
+
+[AuxKernels]
+  active = 'reaction_status'
+  [./reaction_status]
+    type = Reacted
+    variable = reaction_boolean
+    #x = 0.0
+    coupled = temp
   [../]
 []
 
@@ -121,17 +143,17 @@
 
 
   dtmax = 864000.0
-  dtmin = 1.0e-3
-  end_time = 100  
+  dtmin = 1.0e-6
+  end_time = 100
 
   [./TimeStepper]
     type = SolutionTimeAdaptiveDT
     dt = 1.0
   [../]
 
-  l_max_its  = 50 
+  l_max_its  = 50
   l_tol      = 1e-6
-  nl_max_its = 10 
+  nl_max_its = 10
   nl_rel_tol = 1e-6
   nl_abs_tol = 1e-12
 []
@@ -153,7 +175,9 @@
   exodus         = true
   [./Console]
     type = Console
-    linear_residuals    = 1
-    nonlinear_residuals = 1
+    output_linear = 1
+    output_nonlinear = 1
+    #linear_residuals    = 1
+    #nonlinear_residuals = 1
   [../]
 []

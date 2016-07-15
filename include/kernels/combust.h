@@ -16,6 +16,7 @@
 #define COMBUST_H
 
 #include "Kernel.h"
+#include "Reacted.h"
 
 //Forward Declarations
 class combust;
@@ -49,6 +50,7 @@ protected:
   const MaterialProperty<Real> & _thermal_conductivity;
   const MaterialProperty<Real> & _specific_heat;
   const MaterialProperty<Real> & _density;
+  const VariableValue & _coupled_val;
 
   Function & _func;
 };
