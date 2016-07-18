@@ -40,6 +40,7 @@ heatconduction::computeQpResidual()
 {
   //std::cout << _coupled_val[_qp]<<std::endl;
     return _diffusion_coefficient[_qp]*Diffusion::computeQpResidual() - _coupled_val[_qp];
+  //return _diffusion_coefficient[_qp]*Diffusion::computeQpResidual();
 }
 
 Real

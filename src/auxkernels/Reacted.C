@@ -24,13 +24,37 @@ Reacted::computeValue()
   Real k = 1190.0;
   Real dx;
 
-    if(_coupled[_qp] < 2400 && _x == 0.0){
+    /*if(_coupled[_qp] < 2400 && _x == 0.0 && _coupled[_qp] >= 1200){
       _x = 0.0;
+      dx = k*(1.0-_x);
+      return (_coupled[_qp]) + dx;
     }
-    else
+    else if(_coupled[_qp] < 1200 && _x == 0){
+      _x = 0.0;
+      return (_coupled[_qp]);
+    }
+    else {
       _x = 1.0;
+      dx = k*(1.0-_x);
+      return (_coupled[_qp]) + dx;
+    }*/
 
-  dx = k*(1.0-_x);
+    if(_coupled[_qp] < 2400 && _x == 0.0 && _coupled[_qp] >= 1200){
+      _x = 0.0;
+      dx = k*(1.0 - _x);
+    }
+    else if (_coupled[_qp] < 1200 && _x == 0.0){
+      _x = 0.0;
+      dx = 0.0;
+    }
+    else{
+      _x = 1.0;
+      dx = k*(1.0 - _x);
+    }
+
+    return dx;
+
+  //dx = k*(1.0-_x);
   //std::cout<<_x<<std::endl;
-  return dx;
+  //return (_coupled[_qp]) + dx;
 }
