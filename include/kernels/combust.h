@@ -51,6 +51,7 @@ protected:
   const MaterialProperty<Real> & _specific_heat;
   const MaterialProperty<Real> & _density;
   const VariableValue & _coupled_val;
+  const VariableValue & _dcoupled_val_dt;
 
   Function & _func;
 };

@@ -4,7 +4,7 @@
   nx = 100
   ny = 10
   xmax = 0.0258 # Length of test chamber
-  ymax = 0.0108 # Test chamber radius
+  ymax = 0.00258 # Test chamber radius
 []
 
 [Variables]
@@ -26,12 +26,12 @@
 []
 
 [AuxVariables]
-  [./reaction_boolean]
+  [./Reaction_extend]
     order = FIRST
     family = LAGRANGE
     [./InitialCondition]
       type = ConstantIC
-      value = 300.0
+      value = 0.0
     [../]
   [../]
 []
@@ -39,45 +39,27 @@
 [Functions]
   [./Combust]
     type = ParsedFunction
-    value = 1200.0*alpha
+    value = 6000.0*alpha
     vars = alpha
     vals =  1.0e6
   [../]
 []
 
 [Kernels]
-  #[./combust]
-  #  type = combust
-  #  variable = temp
-  #  function = Combust
-  #[../]
   [./heat_conduction]
     type = heatconduction
     variable = temp
-    coupled = reaction_boolean
   [../]
   [./heat_conduction_time_derivative]
     type = heatconductiontimederivative
     variable = temp
   [../]
-#   [./heatconvection]
-#     type = heatconvection
-#     variable = temp
-#     velocity = '3200 0 0'
-#   [../]
-  #[./diffusion]
-  #  type = Diffusion
-  #  variable = temp
-  #[../]
-  #[./reaction]
-  #  type = Reaction
-  #  variable = temp
-  #[../]
+
   [./reaction_heat_source]
    type = combust
    variable = temp
    function = Combust
-   coupled = reaction_boolean
+   coupled = Reaction_extend
   [../]
 []
 
@@ -85,9 +67,10 @@
   active = 'reaction_status'
   [./reaction_status]
     type = Reacted
-    variable = reaction_boolean
-    #x = 0.0
-    coupled = temp
+    variable = Reaction_extend
+    ignition_temp = 1100
+    rate_constant = 1
+    temp_var = temp
   [../]
 []
 
@@ -99,17 +82,17 @@
   #  value = 2390
   #[../]
   [./inlet_temperature]
-    type = ConvectiveFluxFunction
+    type = ConvectiveFluxBC
     variable = temp
-    T_infinity = 300
-    coefficient = 0.10 # W/m^2*K
+    final = 300.0
+    rate = 10.0
     boundary = left
   [../]
   [./outlet_temperature]
-    type = ConvectiveFluxFunction
+    type = ConvectiveFluxBC
     variable = temp
-    T_infinity = 300
-    coefficient = 0.10 # W/m^2*K
+    final = 300.0
+    rate = 10.0
     boundary = right
   [../]
   #[./output_temperature]
@@ -124,7 +107,7 @@
   [./steel]
     type = GenericConstantMaterial
     prop_names = 'thermal_conductivity specific_heat density'
-    prop_values = '3.800 680 4360' # W/m*K, J/kg-K, kg/m^3 @ 296K
+    prop_values = '10.0 680 4360' # W/m*K, J/kg-K, kg/m^3 @ 296K
   [../]
 []
 
@@ -142,20 +125,20 @@
   petsc_options_value = 'hypre boomeramg 201 cubic 0.7'
 
 
-  dtmax = 864000.0
-  dtmin = 1.0e-6
-  end_time = 100
+  dtmax = 1.0
+  dtmin = 1.0e-9
+  end_time = 10
 
   [./TimeStepper]
     type = SolutionTimeAdaptiveDT
-    dt = 1.0
+    dt = 1.0e-5
   [../]
 
   l_max_its  = 50
   l_tol      = 1e-6
   nl_max_its = 10
-  nl_rel_tol = 1e-6
-  nl_abs_tol = 1e-12
+  nl_rel_tol = 1e-10
+  nl_abs_tol = 1e-15
 []
 
 # [Postprocessors]

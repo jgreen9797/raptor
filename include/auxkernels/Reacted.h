@@ -17,8 +17,12 @@ public:
 protected:
   virtual Real computeValue();
 
-  Real _x = 0.0;
-  const VariableValue & _coupled;
+  Real _ignition_temp;
+  
+  Real _kr;
+  
+  const VariableValue & _temp;
+  
 };
 
 #endif //REACTED_H
