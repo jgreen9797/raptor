@@ -16,7 +16,7 @@
       x1 = 0.0
       y1 = 0.0
       x2 = 0.00258
-      y2 = 0.0108
+      y2 = 0.00258
       inside = 1200
       outside = 300
     [../]
@@ -69,7 +69,7 @@
     type = Reacted
     variable = Reaction_extend
     ignition_temp = 1100
-    rate_constant = 1
+    rate_constant = 1.3
     temp_var = temp
   [../]
 []
@@ -85,14 +85,14 @@
     type = ConvectiveFluxBC
     variable = temp
     final = 300.0
-    rate = 10.0
+    rate = 100.0
     boundary = left
   [../]
   [./outlet_temperature]
     type = ConvectiveFluxBC
     variable = temp
     final = 300.0
-    rate = 10.0
+    rate = 100.0
     boundary = right
   [../]
   #[./output_temperature]
@@ -104,10 +104,15 @@
 []
 
 [Materials]
-  [./steel]
-    type = GenericConstantMaterial
-    prop_names = 'thermal_conductivity specific_heat density'
-    prop_values = '10.0 680 4360' # W/m*K, J/kg-K, kg/m^3 @ 296K
+  #[./steel]
+  #  type = GenericConstantMaterial
+  #  prop_names = 'thermal_conductivity specific_heat density'
+  #  prop_values = '4.80 680 4360' # W/m*K, J/kg-K, kg/m^3 @ 296K
+  #[../]
+  [./thermite]
+    type = Products
+    coupled = Reaction_extend
+    temperature = temp
   [../]
 []
 
@@ -126,8 +131,8 @@
 
 
   dtmax = 1.0
-  dtmin = 1.0e-9
-  end_time = 10
+  dtmin = 1.0e-15
+  end_time = 100
 
   [./TimeStepper]
     type = SolutionTimeAdaptiveDT

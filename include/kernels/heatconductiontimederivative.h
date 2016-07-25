@@ -65,8 +65,10 @@ private:
    * using the heat capacity formulation, _specific_heat is set the heat capacity and
    * density is equal to one.
    */
-  const MaterialProperty<Real> * _specific_heat;
-  const MaterialProperty<Real> * _density;
+  const MaterialProperty<Real> & _specific_heat;
+  const MaterialProperty<Real> & _density;
+  //const MaterialProperty<Real> * _specific_heat;
+  //const MaterialProperty<Real> * _density;
   ///@}
 };
 
